@@ -5,8 +5,8 @@
 
 // hashlib, ArduinoJson, ArduinoJson
 // GPIO 13, D7 on the Node MCU v3
-#define OUTPUT_PIN 2
-#define STATUS_LED_PIN 13
+#define OUTPUT_PIN 0
+#define STATUS_LED_PIN 2
 
 #define WIFI_SSID "PDCN"          //替换自己的WIFI
 #define WIFI_PASSWD "Admin601666" //替换自己的WIFI
@@ -52,7 +52,6 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
     Serial.print("] ");
     payload[length] = '\0';
     Serial.println((char *)payload);
-
     if (strstr(topic, ALINK_TOPIC_PROP_SET))
     {
         StaticJsonBuffer<100> jsonBuffer;
@@ -62,6 +61,9 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
             Serial.println("parseObject() failed");
             return;
         }
+        int powerSwitch = root["params"]["PowerSwitch"];
+        digitalWrite(STATUS_LED_PIN, powerSwitch);
+        digitalWrite(OUTPUT_PIN, powerSwitch);
     }
 }
 void mqtt_version_post()
@@ -104,8 +106,10 @@ void mqtt_interval_post()
 
 void setup()
 {
-
+    pinMode(STATUS_LED_PIN, OUTPUT);
     pinMode(OUTPUT_PIN, OUTPUT);
+    digitalWrite(STATUS_LED_PIN, HIGH);
+    digitalWrite(OUTPUT_PIN, HIGH);
     /* initialize serial for debugging */
     Serial.begin(115200);
 
@@ -119,25 +123,17 @@ void setup()
 // the loop function runs over and over again forever
 void loop()
 {
+    // 20秒检查一次
     if (millis() - lastMs >= 20000)
     {
         lastMs = millis();
         mqtt_check_connect();
-        /* Post */
-        mqtt_interval_post();
+        // mqtt_interval_post();
     }
 
     mqttClient.loop();
 
-    unsigned int WAIT_MS = 2000;
-    if (digitalRead(OUTPUT_PIN) == HIGH)
-    {
-        Serial.println("Motion detected!");
-    }
-    else
-    {
-        Serial.println("Motion absent!");
-    }
+    unsigned int WAIT_MS = 1000;
     delay(WAIT_MS); // ms
     Serial.println(millis() / WAIT_MS);
 }
