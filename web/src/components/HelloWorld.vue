@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="main-button">OPEN</div>
+    <div class="main-button" @click="open">OPEN</div>
   </div>
 </template>
 
@@ -35,7 +35,7 @@ export default {
       // mqtts 加密 TCP 连接
       // wxs 微信小程序连接
       // alis 支付宝小程序连接
-      const connectUrl = 'wss://a1fwIZlerKO.iot-as-mqtt.cn-shanghai.aliyuncs.com//sys/a1fwIZlerKO/esp8266_switch_door/thing/event/property/post'
+      const connectUrl = 'wss://a1fwIZlerKO.iot-as-mqtt.cn-shanghai.aliyuncs.com/sys/a1fwIZlerKO/esp8266_switch_door/thing/event/property/post'
       const client = mqtt.connect(connectUrl, options)
 
       // client.on('reconnect', (error) => {
@@ -57,6 +57,9 @@ export default {
       client.on('message', (topic, message) => {
         console.log('收到消息：', topic, message.toString())
       })
+    },
+    open(){
+      client.publish('presence', 'Hello mqtt')
     }
   }
 }
