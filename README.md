@@ -1,5 +1,5 @@
 # esp8266-aliyun-mqtt
-Arduino下ESP8266与MQTT(aliyun)通信，使用ESP-01S验证过
+ESP8266 MQTT(aliyun)通信，使用ESP-01S验证过
 搬运整合的
 ## 使用&&相关资源
 阿里云iot控制台 https://iot.console.aliyun.com/
