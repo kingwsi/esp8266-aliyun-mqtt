@@ -4,18 +4,18 @@
 #include "aliyun_mqtt.h"
 
 // hashlib, ArduinoJson, ArduinoJson
-// GPIO 13, D7 on the Node MCU v3
+// 本案例使用esp-01s，对饮引脚为 0 2
 #define OUTPUT_PIN 0
 #define STATUS_LED_PIN 2
 
-#define WIFI_SSID "PDCN"          //替换自己的WIFI
-#define WIFI_PASSWD "Admin601666" //替换自己的WIFI
+#define WIFI_SSID ""  //替换自己的WIFI
+#define WIFI_PASSWD "" //替换自己的WIFI
 
-#define PRODUCT_KEY "a1Fdqn89SVi"                        //替换自己的PRODUCT_KEY
-#define DEVICE_NAME "door"                               //替换自己的DEVICE_NAME
-#define DEVICE_SECRET "b4aa303002f6a1d07153406aedcb2390" //替换自己的DEVICE_SECRET
+#define PRODUCT_KEY ""   //替换自己的PRODUCT_KEY
+#define DEVICE_NAME ""   //替换自己的DEVICE_NAME
+#define DEVICE_SECRET "" //替换自己的DEVICE_SECRET
 
-#define DEV_VERSION "S-TH-WIFI-v1.0-2020098" //固件版本信息
+#define DEV_VERSION "S-TH-WIFI-v1.0-34487" //固件版本信息
 
 #define ALINK_BODY_FORMAT "{\"id\":\"123\",\"version\":\"1.0\",\"method\":\"%s\",\"params\":%s}"
 #define ALINK_TOPIC_PROP_POST "/sys/" PRODUCT_KEY "/" DEVICE_NAME "/thing/event/property/post"
@@ -66,6 +66,7 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
         digitalWrite(OUTPUT_PIN, powerSwitch);
     }
 }
+// 版本信息上传
 void mqtt_version_post()
 {
     char param[512];
